@@ -5,4 +5,6 @@ Note:
 - %cd% is to be replace with actual absolute path to your project directory
 - the -v flag is used to mount the local directory (your OS kernel project directory) into the /root/env directory within the container
 
+Build for x86: make build-x86_64
+
 Test on qemu: qemu-system-x86_64 -cdrom dist/x86_64/kernel.iso   

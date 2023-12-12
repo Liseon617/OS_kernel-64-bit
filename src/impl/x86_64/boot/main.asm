@@ -21,7 +21,7 @@ start:
     hlt
 
 check_multiboot:
-    cmp eax, 036d76289
+    cmp eax, 0x36d76289
     jne .no_mulitboot
     ret
 
@@ -32,7 +32,7 @@ check_multiboot:
 check_cpuid:
     pushfd ; push flag register onto stack
     pop eax ; popping off the stack into eax register
-    move ecx, eax ; copy made in ecx register
+    mov ecx, eax ; copy made in ecx register
     xor eax, 1 << 21 ; flip bit 21
     push eax
     popfd
@@ -44,7 +44,7 @@ check_cpuid:
     je .no_cupid
     ret
 
-.no_cupid
+.no_cupid:
     mov al, "C" ; error code into al register, C for cpuid
     jmp error
 
@@ -55,14 +55,14 @@ check_long_mode:
     cmp eax, 0x80000001
     jb .no_long_mode
 
-    move eax, 0x80000001
+    mov eax, 0x80000001
     cpuid
     test edx, 1 << 29
     jz .no_long_mode
 
     ret
 
-.no_long_mode
+.no_long_mode:
     mov al, "L"
     jmp error
 
@@ -106,7 +106,7 @@ enable_paging:
     wrmsr
 
     ; enable paging
-    move eax, cr0
+    mov eax, cr0
     or eax, 1 << 31
     mov cr0, eax
 
