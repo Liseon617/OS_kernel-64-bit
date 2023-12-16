@@ -1,28 +1,33 @@
-mov ah, 0x0e
-mov dx, 25
-mov cx, 0
-mov al, 65 + 32; print 'a'
-int 0x10
+[org 0x7c00]
+mov bx, buffer ;pointer to the first character of the string
 
-loop: 
-    inc al
-    cmp cx, dx
-    je $
-    sub al, 32
-    int 0x10
-    inc cx
+inp:
+	mov ah, 0
+	int 0x16
+	cmp al, 13 ; "Enter" key
+	je printString
+	mov ah, 0x0e
+	int 0x10
+	mov [bx], al
+	inc bx
+	jmp inp
 
-    inc al
-    cmp cx, dx
-    je $
-    add al, 32
-    int 0x10
-    inc cx
+printString:
+	mov bx, buffer
+	mov ah, 0x0e ; TTY mode
+	printLoop:
+		mov al, [bx]
+		cmp al, 0
+		je exit
+		int 0x10
+		inc bx
+		jmp printLoop
 
-    jmp loop ;loop
+exit:
+    jmp $ ; ef fd ff
 
-
-jmp $ ;ef fd ff
+buffer:
+    times 10 db 0
 
 times 510 - ($ - $$) db 0; $$ is beginning of current section; $ is current address
 db 0x55, 0xaa
