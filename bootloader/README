@@ -1,0 +1,3 @@
+commands:
+- create the binary file: nasm -f bin boot.asm -o boot.bin
+- run qemu emulator: qemu-system-x86_64 boot.bin 
